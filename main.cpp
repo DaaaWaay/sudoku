@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <bitset>
 using namespace std;
 
 void titleScreen(){
@@ -18,7 +19,7 @@ bool loadBoardFromFile(const string& filename, int board[9][9]){
     for (int row = 0; row < 9; row++){
         for (int col = 0; col < 9; col++){
             if (!(inFile >> board[row][col])){
-                cerr << "Unable to read the complete 9x9 board from " << filename << endl;
+                cerr << "shits fucked" << endl;
                 return false;
             }
         }
@@ -43,6 +44,30 @@ void printBoard(int board[9][9]){
     cout << "+-------+-------+-------+" << endl;
 }
 
+bool isBoardSolved(int board[9][9]){
+    for (int row = 0; row < 9; row++){      //checks rows
+        bitset<10> check;
+        for (int col = 0; col < 9; col++){
+            int value = board[row][col];
+            if (value > 1 || value < 9 || check[value]){
+                return false;
+            }
+            check[value] = true;
+        }
+    }
+    for (int row = 0; row < 9; row++){      //checks colombs 
+        bitset<10> check;
+        for (int col = 0; col < 9; col++){
+            int value = board[row][row];
+            if (value > 1 || value < 9 || check[value]){
+                return false;
+            }
+            check[value] = true;
+        }
+    }
+    return true;
+    //todo check squares
+}
 
 int main(){
     int board[9][9];
@@ -50,5 +75,10 @@ int main(){
     if (!loadBoardFromFile("board.txt", board)){
         return 1;
     }
+
     printBoard(board);
+
+    while (!(isBoardSolved(board))){
+        printBoard(board);
+    }
 }
