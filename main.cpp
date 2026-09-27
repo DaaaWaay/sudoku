@@ -1,48 +1,54 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <string>
 using namespace std;
-
-
 
 void titleScreen(){
     cout<<"SUDOKU"<<endl;
     system("pause");
 }
 
-int loadBoardFromFile(string filename, int board[9][9]){
+bool loadBoardFromFile(const string& filename, int board[9][9]){
     ifstream inFile(filename);
+    if (!inFile){
+        cerr << "Unable to open " << filename << endl;
+        return false;
+    }
 
     for (int row = 0; row < 9; row++){
         for (int col = 0; col < 9; col++){
             if (!(inFile >> board[row][col])){
-                cerr << "shits fucked"<<endl;
+                cerr << "Unable to read the complete 9x9 board from " << filename << endl;
+                return false;
             }
         }
     }
-    return board[9][9];
-}
-void clear() {                                                                      //stolen from stack over flow https://stackoverflow.com/questions/6486289/how-to-clear-the-console-in-c
-    // CSI[2J clears screen, CSI[H moves the cursor to top-left corner
-    std::cout << "\x1B[2J\x1B[H";
+    return true;
 }
 
 void printBoard(int board[9][9]){
-
-    clear();
     for (int row = 0; row < 9; row++){
-        for (int col = 0; col < 9; col++){
-            cout << board[row][col] <<endl;
+        if (row % 3 == 0){
+            cout << "+-------+-------+-------+" << endl;
         }
-        cout << "\n" <<endl;
+        cout << "| ";
+        for (int col = 0; col < 9; col++){
+            cout << board[row][col] << ' ';
+            if (col % 3 == 2){
+                cout << (col == 8 ? "|" : "| ");
+            }
+        }
+        cout << endl;
     }
+    cout << "+-------+-------+-------+" << endl;
 }
 
 
 int main(){
     int board[9][9];
-
     titleScreen();
-    loadBoardFromFile("board.txt", board);
+    if (!loadBoardFromFile("board.txt", board)){
+        return 1;
+    }
     printBoard(board);
-} 
+}
