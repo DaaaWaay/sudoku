@@ -170,13 +170,13 @@ bool checkMove(string action){
 bool validateMove(int row, int col, int num, int board[9][9]){
     //check row
     for (int i = 0; i < 9; i++){
-        if (board[row][i] = num){
+        if (board[row][i] == num){
             return false;
         }
     }
     //check col
     for (int i = 0; i < 9; i++){
-        if (board[i][col] = num){
+        if (board[i][col] == num){
             return false;
         }
     }
@@ -186,7 +186,7 @@ bool validateMove(int row, int col, int num, int board[9][9]){
     int startCol = col - col % 3;
     for (int i = 0; i < 3; i++){
         for (int j = 0; j < 3; j++){
-            if (board[startRow + i][startCol + j] = num){
+            if (board[startRow + i][startCol + j] == num){
                 return false;
             } 
         }
@@ -203,7 +203,8 @@ bool solveIt(int board[9][9]){
     for (int row = 0; row < 9; row++){      //checks rows
             for (int col = 0; col < 9; col++){
                 int value = board[row][col];
-                if (value < 1 || value > 9 || checkRow[row][value]){
+                if (value == 0) continue;
+                if (value < 0 || value > 9 || checkRow[row][value]){
                     cout << "error row" << endl;
                     return false;
                 }
@@ -213,7 +214,8 @@ bool solveIt(int board[9][9]){
     for (int col = 0; col < 9; col++){      //checks rows
         for (int row = 0; row < 9; row++){
             int value = board[row][col];
-            if (value < 1 || value > 9 || checkCol[col][value]){
+            if (value == 0) continue;
+            if (value < 0 || value > 9 || checkCol[col][value]){
                 cout << "error col" << endl;
                 return false;
             }
@@ -222,11 +224,12 @@ bool solveIt(int board[9][9]){
         }
     for (int startRow = 0; startRow < 9; startRow += 3){      //checks sub grids
         for (int startCol = 0; startCol < 9; startCol += 3){
-            int grid = (startRow / 3) * 3 + (startRow / 3);
+            int grid = (startRow / 3) * 3 + (startCol / 3);
             for (int row = startRow; row < startRow + 3; row++){
                 for (int col = startCol; col < startCol + 3; col++){
                     int value = board[row][col];
-                    if (value < 1 || value > 9 || checkGrid[grid][value]){
+                    if (value == 0) continue;
+                    if (value < 0 || value > 9 || checkGrid[grid][value]){
                         cout <<"error subgrid" << endl;
                         return false;
                     }
@@ -235,14 +238,27 @@ bool solveIt(int board[9][9]){
             }
         }
     }
-    for (int row = 0; row < 9; row += 3){      //combine all bit arrays into one bitmap
-        for (int col = 0; col < 9; col += 3){
+    for (int row = 0; row < 9; row++){      //combine all bit arrays into one bitmap
+        for (int col = 0; col < 9; col++){
             int box = (row / 3) * 3 + col / 3;
             options[row][col] = ~(checkRow[row] | checkCol[col] | checkGrid[box]);
             options[row][col].reset(0);
-            
+        }
+    }
+    
+    for (int row = 0; row < 9; row++){
+        for ( int col =0; col < 9; col++){
+            if (board[row][col] = 0){
+                int grid = (row / 3) * 3 + (col / 3);
+
+            }
+
+        }
+    }
     return true;
 }
+
+
 
 int main(){
     int board[9][9];
