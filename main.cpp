@@ -249,20 +249,39 @@ bool solveIt(int board[9][9]){
         }
     }
     
+    int bestRow = -1;
+    int bestCol = -1;
+    int fewestOptions = 10;
     for (int row = 0; row < 9; row++){
         for (int col = 0; col < 9; col++){
-            if (board[row][col] == 0 && options[row][col].count() == 1){
-                for (int value = 1; value <= 9; value++){
-                    if (options[row][col].test(value)){
-                        board[row][col] = value;
-                        cout << "changed cell" << row << col << value << endl;
-                        break;
-                    }
+            if (board[row][col] == 0){
+                int optionCount = options[row][col].count();
+                if (optionCount == 0){
+                    return false;
                 }
-            } 
+                if (optionCount < fewestOptions){
+                    bestRow = row;
+                    bestCol = col;
+                    fewestOptions = optionCount;
+                }
+            }
         }
     }
-    return true;
+
+    if (bestRow == -1){
+        return true;
+    }
+
+    for (int value = 1; value <= 9; value++){
+        if (options[bestRow][bestCol].test(value)){
+            board[bestRow][bestCol] = value;
+            if (solveIt(board)){
+                return true;
+            }
+            board[bestRow][bestCol] = 0;
+        }
+    }
+    return false;
 }
 
 
@@ -294,5 +313,10 @@ int main(){
             makeMove(action,board);
         }
     }
-    endScreen();
+    if (isBoardSolved(board)){
+        clearScreen();
+        printBoard(board);
+        endScreen();
+    }
+    ;
 }
