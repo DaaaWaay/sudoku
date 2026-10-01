@@ -290,40 +290,42 @@ bool solveIt(int board[9][9]){
 
 
 int main(){
-    int board[9][9];
-    string fileName = "na";
-    titleScreen();
-    cout << "\033[34m" << "please select board by typing what file to access eg. board.txt" << "\033[0m "<< endl;
-    cin >> fileName;
-    while (!loadBoardFromFile(fileName, board)){
-        //cout << "Unable to open" << endl;
+    while (true){
+        clearScreen();
+        int board[9][9];
+        string fileName = "na";
+        titleScreen();
         cout << "\033[34m" << "please select board by typing what file to access eg. board.txt" << "\033[0m "<< endl;
         cin >> fileName;
+        while (!loadBoardFromFile(fileName, board)){
+            //cout << "Unable to open" << endl;
+            cout << "\033[34m" << "please select board by typing what file to access eg. board.txt" << "\033[0m "<< endl;
+            cin >> fileName;
+            
+        }
+
+        initFixedCells(board);
         
-    }
+        string action= "na";
+        string solve = "SOLVE";
+        string SOLVE = "solve"; // yes, i know this is janky. it wasnt working with toupper
+        while (!(isBoardSolved(board))){
+            printBoard(board);
 
-    initFixedCells(board);
-     
-    string action= "na";
-    string solve = "SOLVE";
-    string SOLVE = "solve"; // yes, i know this is janky. it wasnt working with toupper
-    while (!(isBoardSolved(board))){
-        printBoard(board);
-
-        cout << "Enter your action in the form [columnD]-[row]=[number] eg. A-1=5"<< endl;
-        checkMove(action);
-        cin >> action;
-        if (action == solve || action == SOLVE){
-            solveIt(board);
+            cout << "Enter your action in the form [column]-[row]=[number] eg. A-1=5. or type SOLVE to fix"<< endl;
+            checkMove(action);
+            cin >> action;
+            if (action == solve || action == SOLVE){
+                solveIt(board);
+            }
+            else {
+                makeMove(action,board);
+            }
         }
-        else {
-            makeMove(action,board);
+        if (isBoardSolved(board)){
+            clearScreen();
+            printBoard(board);
+            endScreen();
         }
     }
-    if (isBoardSolved(board)){
-        clearScreen();
-        printBoard(board);
-        endScreen();
-    }
-    
 }
