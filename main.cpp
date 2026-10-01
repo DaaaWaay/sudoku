@@ -259,7 +259,7 @@ bool solveIt(int board[9][9]){
                         break;
                     }
                 }
-            }
+            } 
         }
     }
     return true;
