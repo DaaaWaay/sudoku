@@ -208,10 +208,10 @@ bool solveIt(int board[9][9]){
                     cout << "error row" << endl;
                     return false;
                 }
-                checkRow[row][value] = true;
+                checkRow[row][value] = true; 
             }
         }
-    for (int col = 0; col < 9; col++){      //checks rows
+    for (int col = 0; col < 9; col++){      //checks col
         for (int row = 0; row < 9; row++){
             int value = board[row][col];
             if (value == 0) continue;
@@ -219,7 +219,7 @@ bool solveIt(int board[9][9]){
                 cout << "error col" << endl;
                 return false;
             }
-                checkRow[col][value] = true;
+                checkCol[col][value] = true;
             }
         }
     for (int startRow = 0; startRow < 9; startRow += 3){      //checks sub grids
@@ -240,6 +240,9 @@ bool solveIt(int board[9][9]){
     }
     for (int row = 0; row < 9; row++){      //combine all bit arrays into one bitmap
         for (int col = 0; col < 9; col++){
+            if (board[row][col] != 0){
+                continue;
+            }
             int box = (row / 3) * 3 + col / 3;
             options[row][col] = ~(checkRow[row] | checkCol[col] | checkGrid[box]);
             options[row][col].reset(0);
@@ -247,19 +250,16 @@ bool solveIt(int board[9][9]){
     }
     
     for (int row = 0; row < 9; row++){
-        for ( int col =0; col < 9; col++){
-            if (board[row][col] == 0){
-                int grid = (row / 3) * 3 + (col / 3);
-                if ((options[row][col].count()) == 1){
-                    for (int i = 0; i < 9; i++){
-                        if (options[row][col].test(i) == 1){
-                            board[row][col] = i;
-                            cout << "changed cell" << row << col << i << endl;
-                        }
+        for (int col = 0; col < 9; col++){
+            if (board[row][col] == 0 && options[row][col].count() == 1){
+                for (int value = 1; value <= 9; value++){
+                    if (options[row][col].test(value)){
+                        board[row][col] = value;
+                        cout << "changed cell" << row << col << value << endl;
+                        break;
                     }
                 }
             }
-
         }
     }
     return true;
