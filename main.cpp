@@ -248,9 +248,16 @@ bool solveIt(int board[9][9]){
     
     for (int row = 0; row < 9; row++){
         for ( int col =0; col < 9; col++){
-            if (board[row][col] = 0){
+            if (board[row][col] == 0){
                 int grid = (row / 3) * 3 + (col / 3);
-
+                if ((options[row][col].count()) == 1){
+                    for (int i = 0; i < 9; i++){
+                        if (options[row][col].test(i) == 1){
+                            board[row][col] = i;
+                            cout << "changed cell" << row << col << i << endl;
+                        }
+                    }
+                }
             }
 
         }
@@ -271,16 +278,21 @@ int main(){
 
     initFixedCells(board);
      
-    string action;
-    action = "na";
-    
+    string action= "na";
+    string solve = "SOLVE";
+
     while (!(isBoardSolved(board))){
         printBoard(board);
 
         cout << "Enter your action in the form [columnD]-[row]=[number] eg. A-1=5"<< endl;
         checkMove(action);
         cin >> action;
-        makeMove(action,board);
+        if (action == solve){
+            solveIt(board);
+        }
+        else {
+            makeMove(action,board);
+        }
     }
     endScreen();
 }
