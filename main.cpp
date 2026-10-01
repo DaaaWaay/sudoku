@@ -12,11 +12,14 @@ void titleScreen(){             // title splash https://patorjk.com/software/taa
     cout<<  " SSS  O   O D   D O   O KKK   U   U"<<endl; 
     cout<<  "    S O   O D   D O   O K  K  U   U "<<endl;
     cout<<  "SSSS   OOO  DDDD   OOO  K   K  UUU"<<endl;
-    system("pause");
 }
 
 void endScreen(){             // end screen
-    cout<<"congratulations you solved it"<<endl;
+    cout<<  " CCC   OOO  N   N  GGG  RRRR    A   TTTTT U   U L       A   TTTTT III  OOO  N   N  SSSS "<<endl;
+    cout<<  "C   C O   O NN  N G     R   R  A A    T   U   U L      A A    T    I  O   O NN  N S     "<<endl; 
+    cout<<  "C     O   O N N N G GG  RRRR  AAAAA   T   U   U L     AAAAA   T    I  O   O N N N  SSS  "<<endl; 
+    cout<<  "C   C O   O N  NN G   G R  R  A   A   T   U   U L     A   A   T    I  O   O N  NN     S  "<<endl;
+    cout<<  " CCC   OOO  N   N  GGG  R   R A   A   T    UUU  LLLLL A   A   T   III  OOO  N   N SSSS  "<<endl;
     system("pause");
 }
 
@@ -46,7 +49,7 @@ bool loadBoardFromFile(const string& filename, int board[9][9]){    //loads the 
     for (int row = 0; row < 9; row++){
         for (int col = 0; col < 9; col++){
             if (!(inFile >> board[row][col])){
-                cerr << "shits fucked" << endl;
+                cerr << "Board out of range" << endl;
                 return false;
             }
         }
@@ -288,25 +291,29 @@ bool solveIt(int board[9][9]){
 
 int main(){
     int board[9][9];
-
+    string fileName = "na";
     titleScreen();
-    if (!loadBoardFromFile("board.txt", board)){
-        cout << "ruh roh" << endl;
-        return 1;
+    cout << "\033[34m" << "please select board by typing what file to access eg. board.txt" << "\033[0m "<< endl;
+    cin >> fileName;
+    while (!loadBoardFromFile(fileName, board)){
+        //cout << "Unable to open" << endl;
+        cout << "\033[34m" << "please select board by typing what file to access eg. board.txt" << "\033[0m "<< endl;
+        cin >> fileName;
+        
     }
 
     initFixedCells(board);
      
     string action= "na";
     string solve = "SOLVE";
-
+    string SOLVE = "solve"; // yes, i know this is janky. it wasnt working with toupper
     while (!(isBoardSolved(board))){
         printBoard(board);
 
         cout << "Enter your action in the form [columnD]-[row]=[number] eg. A-1=5"<< endl;
         checkMove(action);
         cin >> action;
-        if (action == solve){
+        if (action == solve || action == SOLVE){
             solveIt(board);
         }
         else {
@@ -318,5 +325,5 @@ int main(){
         printBoard(board);
         endScreen();
     }
-    ;
+    
 }
