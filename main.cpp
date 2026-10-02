@@ -15,11 +15,11 @@ void titleScreen(){             // title splash https://patorjk.com/software/taa
 }
 
 void endScreen(){             // end screen
-    cout<<  " CCC   OOO  N   N  GGG  RRRR    A   TTTTT U   U L       A   TTTTT III  OOO  N   N  SSSS "<<endl;
-    cout<<  "C   C O   O NN  N G     R   R  A A    T   U   U L      A A    T    I  O   O NN  N S     "<<endl; 
-    cout<<  "C     O   O N N N G GG  RRRR  AAAAA   T   U   U L     AAAAA   T    I  O   O N N N  SSS  "<<endl; 
-    cout<<  "C   C O   O N  NN G   G R  R  A   A   T   U   U L     A   A   T    I  O   O N  NN     S  "<<endl;
-    cout<<  " CCC   OOO  N   N  GGG  R   R A   A   T    UUU  LLLLL A   A   T   III  OOO  N   N SSSS  "<<endl;
+    cout<<  " CCC    OOO   N   N   GGG   RRRR     A    TTTTT  U   U  L        A    TTTTT  III   OOO   N   N   SSSS "<<endl;
+    cout<<  "C   C  O   O  NN  N  G      R   R   A A     T    U   U  L       A A     T     I   O   O  NN  N  S     "<<endl; 
+    cout<<  "C      O   O  N N N  G GG   RRRR   AAAAA    T    U   U  L      AAAAA    T     I   O   O  N N N   SSS  "<<endl; 
+    cout<<  "C   C  O   O  N  NN  G   G  R  R   A   A    T    U   U  L      A   A    T     I   O   O  N  NN      S  "<<endl;
+    cout<<  " CCC    OOO   N   N   GGG   R    R A   A    T     UUU   LLLLL  A   A    T    III   OOO   N   N  SSSS  "<<endl;
     system("pause");
 }
 
@@ -287,8 +287,6 @@ bool solveIt(int board[9][9]){
     return false;
 }
 
-
-
 int main(){
     while (true){
         clearScreen();
@@ -303,7 +301,6 @@ int main(){
             cin >> fileName;
             
         }
-
         initFixedCells(board);
         
         string action= "na";
@@ -316,7 +313,9 @@ int main(){
             checkMove(action);
             cin >> action;
             if (action == solve || action == SOLVE){
-                solveIt(board);
+                if (!(solveIt(board))){
+                    cerr << "board can not be solved" << endl;
+                }
             }
             else {
                 makeMove(action,board);
